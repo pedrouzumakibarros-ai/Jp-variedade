@@ -1,1 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casa & Conforto</title>
 
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin:0;
+    background:#f4f4f4;
+}
+
+header{
+    background:#111;
+    color:white;
+    padding:15px;
+    text-align:center;
+}
+
+.container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+    padding:20px;
+}
+
+.card{
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 3px 8px rgba(0,0,0,0.1);
+    text-align:center;
+}
+
+.card img{
+    width:100%;
+    height:200px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+button{
+    background:#111;
+    color:white;
+    border:none;
+    padding:10px;
+    margin-top:10px;
+    cursor:pointer;
+    border-radius:5px;
+}
+
+button:hover{
+    background:#444;
+}
+
+.cart{
+    position:fixed;
+    top:0;
+    right:0;
+    width:300px;
+    height:100%;
+    background:white;
+    box-shadow:-3px 0 8px rgba(0,0,0,0.2);
+    padding:15px;
+    overflow-y:auto;
+}
+
+.star{
+    color:gold;
+    cursor:pointer;
+    font-size:20px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>Casa & Conforto</h1>
+<p>Qualidade, Sofisticação e Preços Acessíveis</p>
+</header>
+
+<div class="container">
+
+<!-- Manta -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1582582429416-efb31f4f1f19" />
+<h3>Manta Premium de Algodão Egípcio</h3>
+<p>Manta premium confeccionada em algodão egípcio de alta qualidade, extremamente macia e sofisticada.</p>
+<p><strong>R$ 28</strong></p>
+<button onclick="addToCart('Manta Premium',28)">Adicionar</button>
+<div>
+<span class="star" onclick="rate(this)">★</span>
+<span class="star" onclick="rate(this)">★</span>
+<span class="star" onclick="rate(this)">★</span>
+<span class="star" onclick="rate(this)">★</span>
+<span class="star" onclick="rate(this)">★</span>
+</div>
+</div>
+
+<!-- Lençol Solteiro -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" />
+<h3>Lençol Solteiro Soft Touch</h3>
+<p>Tecido macio e resistente tamanho 28, ideal para máximo conforto.</p>
+<p><strong>R$ 28</strong></p>
+<button onclick="addToCart('Lençol Solteiro',28)">Adicionar</button>
+<div>
+<span class="star" onclick="rate(this)">★</span>
+<span class="star" onclick="rate(this)">★</span>
+<span class="star" onclick="rate(this)">★</span>
+<span class="star" onclick="rate(this)">★</span>
+<span class="star" onclick="rate(this)">★</span>
+</div>
+</div>
+
+<!-- Lençol Casal -->
+<div class="card">
+<img src="https://images.unsplash.com/photo-1595526114035-0d45ed16cfbf" />
+<h3>Lençol Casal Luxo 40cm</h3>
+<p>Lençol premium tamanho 40 com excelente acabamento.</p>
+<p><strong>R$ 35</strong></p>
+<button onclick="addToCart('Lençol Casal',35)">Adicionar</button>
+<div>
+<span class="star" onclick="rate(this)">★</span>
+<span class="star" onclick="rate(this)">★</span>
+<span class="star" onclick="rate(this)">★</span>
+<span class="star" onclick="rate(this)">★</span>
+<span class="star" onclick="rate(this)">★</span>
+</div>
+</div>
+
+</div>
+
+<!-- Carrinho -->
+<div class="cart">
+<h2>🛒 Carrinho</h2>
+<ul id="cartItems"></ul>
+<h3>Total: R$ <span id="total">0</span></h3>
+<button onclick="clearCart()">Limpar Carrinho</button>
+</div>
+
+<script>
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+function addToCart(name, price){
+    cart.push({name,price});
+    saveCart();
+    renderCart();
+}
+
+function removeItem(index){
+    cart.splice(index,1);
+    saveCart();
+    renderCart();
+}
+
+function clearCart(){
+    cart = [];
+    saveCart();
+    renderCart();
+}
+
+function saveCart(){
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+function renderCart(){
+    let cartItems = document.getElementById("cartItems");
+    let total = 0;
+    cartItems.innerHTML = "";
+    cart.forEach((item,index)=>{
+        total += item.price;
+        cartItems.innerHTML += 
+        `<li>${item.name} - R$ ${item.price}
+        <button onclick="removeItem(${index})">X</button></li>`;
+    });
+    document.getElementById("total").innerText = total;
+}
+
+function rate(star){
+    let stars = star.parentElement.querySelectorAll(".star");
+    stars.forEach(s => s.style.color = "gray");
+    let current = Array.from(stars).indexOf(star);
+    for(let i=0;i<=current;i++){
+        stars[i].style.color = "gold";
+    }
+}
+
+renderCart();
+</script>
+
+</body>
+  </html>
